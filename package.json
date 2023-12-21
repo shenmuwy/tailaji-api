@@ -1,0 +1,36 @@
+{
+  "name": "app-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "node-dev ./bin/www",
+    "build": "webpack --mode production"
+  },
+  "pkg": {
+    "scripts": "app.js",
+    "assets": [
+      "public/**/*"
+    ]
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-jwt": "^8.4.1",
+    "formidable": "^2.1.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^2.4.2",
+    "moment": "^2.29.4",
+    "morgan": "~1.9.1",
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.0",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "node-dev": "^8.0.0"
+  },
+  "bin": "./bin/www"
+}
