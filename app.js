@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:1420')
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Token')
-  next();  
+  next()
 });
 
 
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 
 // 解析token获取用户信息
 // app.use(async (req, res, next)=>{
-//   let token = req.headers.authorization;
+//   let token = req.headers['x-token'];
 //   console.log(req);
 //   console.log(token);
 //   if(token == undefined){
@@ -60,8 +60,8 @@ app.use(jwt({
   secret: configs.server.signkey,
   algorithms: ['HS256'],
   getToken: (req) => {
-    if (req.headers['X-Token']) {
-      return req.headers['X-Token']
+    if (req.headers['x-token']) {
+      return req.headers['x-token'].replace('Bearer ', '')
     }
     return null
   }

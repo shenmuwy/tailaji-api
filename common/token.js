@@ -8,7 +8,7 @@ exports.setToken = function(username,userid){
       name:username,
       _id:userid
     },configs.server.signkey,{ expiresIn:'1h' });
-    token = 'Bearer' + ' ' + token
+    // token = 'Bearer' + ' ' + token
     resolve(token);
   })
 }
