@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const logger = require('./logger')
 var { expressjwt: jwt } = require("express-jwt");
 
-var usersRouter = require('./routes/users');
+var router = require('./routes/index');
 const configs = require('./configs');
 
 var app = express();
@@ -24,6 +24,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // 访问静态资源
 app.use('/public',express.static('public'));
+
+app.use((req, res, next) => {  
+  res.header('Access-Control-Allow-Origin', 'http://localhost:1420')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Token')
+  next();  
+});
+
 
 
 //插件类抖往上放  完事授权
@@ -47,26 +55,32 @@ app.use('/public',express.static('public'));
 //   }
 // });
 
+
 app.use(jwt({
   secret: configs.server.signkey,
   algorithms: ['HS256'],
+  getToken: (req) => {
+    if (req.headers['X-Token']) {
+      return req.headers['X-Token']
+    }
+    return null
+  }
 }).unless({
-  path: ['/user/user_login', '/user/user_reg', /^\/public\/.*/]//除了这些地址，其他的URL都需要验证
+  path: ['/api/user_login', '/user/user_reg', /^\/public\/.*/]//除了这些地址，其他的URL都需要验证
 }));
 // 啥都不加 和单独加/ 一个作用  先定义的生效 后定义的不执行 所以 顺序很重要 你要监听全部 bi
-app.use('/user', usersRouter);
+app.use('/api', router);
 
-let code401 = '请先登录!'
 
 const _errorHandler = (err, req, res, next) => {
   logger.error(`${req.method} ${req.originalUrl} ` + err.message)
   let errMsg = ''
   if (err.status == '401') {
-    errMsg = code401
+    errMsg = '请先登录!'
   }
-  res.status(err.status || 500).json({
+  res.status(200).json({
     code: err.status,
-    message: errMsg,
+    msg: errMsg,
     data: {}
   })
 }
