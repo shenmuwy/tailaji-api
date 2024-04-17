@@ -1,6 +1,8 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 const path = require('path');
+const common = require('./utils/common');
+require("winston-daily-rotate-file");
 
 const env = process.env.NODE_ENV || 'development';
 const logDir = 'log';
@@ -10,15 +12,26 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
 
-const filename = path.join(logDir, 'results.log');
+const customFormat = format.combine(
+  format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
+  format.align(),
+  format.printf((i) => `${i.level}: ${[i.timestamp]}: ${i.message}`)
+)
+
+const defaultOptions = {
+  format: customFormat,
+  datePattern: "YYYY-MM-DD",
+  zippedArchive: true,
+  maxSize: "20m",
+  maxFiles: "14d",
+}
+
+const filename = path.join(logDir, `${common.formatTime('yyyy-MM-dd')}.log`);
 
 const logger = createLogger({
   // change level if in dev environment versus production
   level: env === 'production' ? 'info' : 'debug',
-  format: format.combine(
-    format.label({ label: path.basename(process.mainModule.filename) }),
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })
-  ),
+  format: customFormat,
   transports: [
     new transports.Console({
       format: format.combine(
@@ -31,12 +44,7 @@ const logger = createLogger({
     }),
     new transports.File({
       filename,
-      format: format.combine(
-        format.printf(
-          info =>
-            `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`
-        )
-      )
+      ...defaultOptions
     })
   ]
 });

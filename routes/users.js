@@ -11,4 +11,6 @@ router.post('/user_login', userController.loginUser)
 
 router.post('/user_upload', userController.uploadUser)
 
+router.get('/user_modify', userController.modifyUser)
+
 module.exports = router;

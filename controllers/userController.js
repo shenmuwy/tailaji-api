@@ -4,6 +4,7 @@ const token = require('../common/token')
 const formidable = require('formidable')
 const fs = require('fs')
 const {v4: uuidv4} = require('uuid')
+const datajs = require('../data');
 
 const userController = {
   // showUser 获取用户数据并展示到页面
@@ -34,16 +35,16 @@ const userController = {
   // 用户登录
   loginUser: async function(req, res, next) {
     try {
-      let user = req.body
-      console.log(user.name, user.psw)
-      if (!(user.name && user.psw)) {
+      const {name, psw} = req.body
+      if (!(name && psw)) {
         res.json(result.fail('账号或密码不能为空'))
         return
       }
-      let userData = await User.login(user.name, user.psw)
-      if (userData.length != 0) {
-        token.setToken(userData[0].name ,userData[0].id).then( (token) => {
-          res.json(result.success({token, userId: userData[0].id}))
+      const userData = await datajs.readFile()
+      console.log(userData)
+      if (name === userData.userName && psw === userData.passWord) {
+        token.setToken(name ,userData.id).then( (token) => {
+          res.json(result.success({token, userId: userData.id}))
         })
         
       } else {
@@ -74,6 +75,28 @@ const userController = {
         fs.writeFileSync(`public/images/${imgName}`, fs.readFileSync(files.img.filepath));
         res.json(result.success({img: `public/images/${imgName}.png`}))
       })
+    } catch (error) {
+      res.json(result.fail('程序内部发生错误'))
+      console.log(error);
+    }
+  },
+  modifyUser: async function(req, res, next) {
+    try {
+      const { oldPsw, psw } = req.query
+      console.log(req.query)
+      let userData = await datajs.readFile()
+      if (!psw) {
+        return res.json(result.fail('密码不能为空'))
+      }
+      if (oldPsw !== userData.passWord) {
+        return res.json(result.fail('原密码不正确'))
+      }
+      if (psw === oldPsw) {
+        return res.json(result.fail('新密码和旧密码不能相同'))
+      }
+      userData.passWord = psw
+      await datajs.writeFile(userData)
+      res.json(result.success())
     } catch (error) {
       res.json(result.fail('程序内部发生错误'))
       console.log(error);

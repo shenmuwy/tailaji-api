@@ -1,0 +1,11 @@
+{
+	"id": "1",
+	"userName": "admin",
+	"passWord": "123456",
+	"mods": [
+		{
+			"modID": "U2KInNV2qarEHYrOIgsA1w==",
+			"version": "1234567"
+		}
+	]
+}

@@ -8,8 +8,12 @@ var { expressjwt: jwt } = require("express-jwt");
 
 var router = require('./routes/index');
 const configs = require('./configs');
+const datajs = require('./data');
+const result = require('./common/result');
 
 var app = express();
+
+datajs.create();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -73,10 +77,14 @@ app.use('/api', router);
 
 
 const _errorHandler = (err, req, res, next) => {
+  console.log('_errorHandler', err);
   logger.error(`${req.method} ${req.originalUrl} ` + err.message)
   let errMsg = ''
   if (err.status == '401') {
     errMsg = '请先登录!'
+  }
+  if (err.status == '404') {
+    errMsg = '接口不存在!'
   }
   res.status(200).json({
     code: err.status,
@@ -85,5 +93,9 @@ const _errorHandler = (err, req, res, next) => {
   })
 }
 app.use(_errorHandler)
+
+app.use((req, res, next) => {
+  res.status(404).send(result.fail('接口不存在'))
+})
 
 module.exports = app;
