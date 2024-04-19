@@ -1,5 +1,5 @@
 const resultCode = require('./resultCode')
-const moment = require('moment')
+const common = require('../utils/common')
 
 class result {
   code;
@@ -11,7 +11,7 @@ class result {
     this.code = code
     this.msg = msg
     this.data = data
-    this.time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    this.time = common.formatTime('dateTime', new Date(), true)
   }
 
   static success (data) {
