@@ -1,6 +1,7 @@
-let fs=require('fs');
-
-let path=require('path');
+const fs=require('fs');
+const path=require('path');
+const express=require('express');
+const router=express.Router();
 
 let apis=[];
 
@@ -12,9 +13,6 @@ fs.readdirSync(__dirname)
     let filepath=path.join(__dirname,filename);
     apis.push(require(filepath))
 })
-
-var express=require('express');
-var router=express.Router();
 
 apis.forEach(api => {
     router.use('/',api)

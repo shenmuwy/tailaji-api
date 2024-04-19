@@ -1,17 +1,16 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const logger = require('./logger')
-var { expressjwt: jwt } = require("express-jwt");
+const { expressjwt: jwt } = require("express-jwt");
 
-var router = require('./routes/index');
+const router = require('./routes/index');
 const configs = require('./configs');
 const datajs = require('./data');
 const result = require('./common/result');
 
-var app = express();
+const app = express();
 
 datajs.create();
 
@@ -30,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public',express.static('public'));
 
 app.use((req, res, next) => {  
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173')
+  res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-Token')
   next()
@@ -70,32 +69,24 @@ app.use(jwt({
     return null
   }
 }).unless({
-  path: ['/api/user_login', '/user/user_reg', /^\/public\/.*/], //除了这些地址，其他的URL都需要验证
+  path: ['/api/user_login', '/user/user_reg', /^\/public\/.*/],
   method: ['OPTIONS']
 }));
-// 啥都不加 和单独加/ 一个作用  先定义的生效 后定义的不执行 所以 顺序很重要 你要监听全部 bi
 app.use('/api', router);
 
 
 const _errorHandler = (err, req, res, next) => {
   logger.error(`${req.method} ${req.originalUrl} ` + err.message)
-  let errMsg = ''
   if (err.status == '401') {
-    errMsg = '请先登录!'
+    res.status(200).json(result.authFailed())
   }
-  if (err.status == '404') {
-    errMsg = '接口不存在!'
-  }
-  res.status(200).json({
-    code: err.status,
-    msg: errMsg,
-    data: {}
-  })
 }
 app.use(_errorHandler)
 
+
 app.use((req, res, next) => {
-  res.status(404).send(result.fail('接口不存在'))
+  res.status(404).send(result.noFound())
 })
+
 
 module.exports = app;

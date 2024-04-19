@@ -13,7 +13,7 @@ const filecreate = {
         writeFile(data)
       })
     } else {
-      logger.info('文件已存在')
+      console.log('文件已存在')
     }
   },
   readFile: function () {

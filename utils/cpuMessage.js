@@ -63,6 +63,23 @@ class OSUtils {
       total,
     }
   }
+
+  getMemoryUsage (format='b', percentage = false) {
+    // percentage 获取百分比
+    // format: '' | 'kb' | 'mb' | 'gb'
+    // 获取系统空闲内存
+    const systemFree = os.freemem();
+    // 获取系统总内存
+    const systemTotal = os.totalmem();
+
+    const memoryMap = {
+      b: systemTotal,
+      kb: systemTotal / 1024,
+      mb: systemTotal / 1024 / 1024,
+      gb: systemTotal / 1024 / 1024 / 1024
+    }
+    return Number(percentage ? ((1 - systemFree / systemTotal) * 100).toFixed(1) : memoryMap[format].toFixed(2))
+  }
 }
 
 module.exports = new OSUtils()

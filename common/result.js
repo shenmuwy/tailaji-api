@@ -21,6 +21,14 @@ class result {
   static fail (errData) {
     return new result(resultCode.FAILED.code, errData, '')
   }
+  // token验证失败
+  static authFailed () {
+    return new result(resultCode.AUTH_FAILED.code, resultCode.AUTH_FAILED.desc, null)
+  }
+  // 接口不存在
+  static noFound () {
+    return new result(resultCode.API_NOT_FOUNT.code, resultCode.API_NOT_FOUNT.desc, null)
+  }
   //参数校验失败
   static validateFailed (param) {
     return new result(resultCode.VALIDATE_FAILED.code, resultCode.VALIDATE_FAILED.desc, param)

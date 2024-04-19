@@ -54,15 +54,13 @@ const modController = {
       const cpuUsage = await OSUtils.getCPUUsage({ ms: 0, percentage: true });
 
       console.timeEnd('getCPUUsage')
-      // 获取系统空闲内存
-      const systemFree = os.freemem();
-      // 获取系统总内存
-      const systemTotal = os.totalmem();
+
+      console.log(OSUtils.getMemoryUsage('gb'))
       const cpuData = {
         cpuNum: os.cpus().length / 2,
         cpuUsage: Number(cpuUsage),
-        memoryNum: Number((systemTotal / 1024 / 1024 / 1024).toFixed(1)),
-        memoryUsage: Number(((1 - systemFree / systemTotal) * 100).toFixed(2))
+        memoryNum: OSUtils.getMemoryUsage('gb'),
+        memoryUsage: OSUtils.getMemoryUsage('', true)
       }
       res.json(result.success(cpuData))
     } catch (error) {
