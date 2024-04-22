@@ -1,3 +1,4 @@
+const fs = require('fs')
 const common ={
   formatTime: function(format, date = new Date(), isPad = false) {
     date = new Date(date)
@@ -49,7 +50,24 @@ const common ={
 
     format = _format(format)
     return format(dateInfo)
-  }
+  },
+  mkdir: function(filePath) {
+    const arr=filePath.split('/');
+    const dirCache={};
+    let dir=arr[0];
+    for(let i=1;i<arr.length;i++){
+        if(!dirCache[dir]&&!fs.existsSync(dir)){
+            dirCache[dir]=true;
+            fs.mkdirSync(dir);
+        }
+        dir=dir+'/'+arr[i];
+    }
+    if (filePath.split('.').length > 1) {
+      fs.writeFileSync(filePath, '')
+    } else {
+      fs.mkdirSync(filePath)
+    }
+}
 }
 
 module.exports = common

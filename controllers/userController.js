@@ -6,6 +6,7 @@ const fs = require('fs')
 const {v4: uuidv4} = require('uuid')
 const datajs = require('../data');
 const logs = require('../utils/logs/logs')
+const common = require('../utils/common')
 
 const userController = {
   // showUser 获取用户数据并展示到页面
@@ -45,7 +46,8 @@ const userController = {
       console.log(userData)
       if (name === userData.userName && psw === userData.passWord) {
         token.setToken(name ,userData.id).then( (token) => {
-          res.json(result.success({token, userId: userData.id}))
+          const img = `http://${req.headers.host}/` + userData.img
+          res.json(result.success({token, userId: userData.id, img}))
         })
         
       } else {
@@ -59,22 +61,32 @@ const userController = {
   // 用户上传头像
   uploadUser: async function(req, res, next) {
     try {
-      const form = formidable({ multiples: true });
+      const form = formidable({ multiples: true })
 
-      form.parse(req, (err, fields, files) => {
-        console.log(111);
-        console.log(err, fields, files)
+      form.parse(req, async (err, fields, files) => {
         if (err) {
           next(err);
           return;
         }
-        if (files.img.mimetype != 'image/png') {
+        const suffix = files.file.mimetype.split("/")[1]
+        if(['jpeg', 'png', 'gif', 'jpg'].indexOf(suffix) < 0) {
           res.json(result.fail('请上传图片'))
-          return
+          return;
         }
-        let imgName = uuidv4()
-        fs.writeFileSync(`public/images/${imgName}`, fs.readFileSync(files.img.filepath));
-        res.json(result.success({img: `public/images/${imgName}.png`}))
+        const data = await datajs.readFile()
+        const imgName = uuidv4()
+        const path = 'public/images'
+        const imgpath = path +`/${imgName}.${suffix}`
+        if (data.img) {
+          fs.unlinkSync(data.img)
+        }
+        data.img = imgpath
+        await datajs.writeFile(data)
+        if (!fs.existsSync(path)) {
+          common.mkdir(path)
+        }
+        fs.writeFileSync(imgpath, fs.readFileSync(files.file.filepath))
+        res.json(result.success({img: `http://${req.headers.host}/${imgpath}`}))
       })
     } catch (error) {
       res.json(result.fail('程序内部发生错误'))
