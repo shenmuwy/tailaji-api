@@ -12,7 +12,6 @@ function formatLogArguments(args) {
   args = Array.prototype.slice.call(args)
 
   const stackInfo = getStackInfo(1)
-  console.log(stackInfo)
   if (stackInfo) {
     // get file path relative to project root
     const calleeStr = '[' + stackInfo.relativePath + ':' + stackInfo.line + ']: '
@@ -30,7 +29,6 @@ function formatLogArguments(args) {
       args.unshift(calleeStr)
     }
   }
-  console.log('123', args)
   return args
 }
 
@@ -50,7 +48,6 @@ function getStackInfo(stackIndex) {
 
   var s = stacklist[stackIndex] || stacklist[0]
   var sp = stackReg.exec(s) || stackReg2.exec(s)
-  console.log(sp)
   if (sp && sp.length === 5) {
     return {
       method: sp[1],
