@@ -1,7 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 const path = require('path');
-const common = require('./utils/common')
+const common = require('../common')
 require("winston-daily-rotate-file");
 
 const env = process.env.NODE_ENV || 'development';
@@ -16,7 +16,7 @@ const customFormat = format.combine(
   format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
   format.align(),
   format.label({ label: path.basename(process.mainModule.filename) }),
-  format.printf((info) => `${common.formatTime('dateTime', info.timestamp, true)} ${info.level} [${info.label}]: ${info.message}`)
+  format.printf((info) => `${common.formatTime('dateTime', info.timestamp, true)} ${info.level} ${info.message.replaceAll('\t', '')}`),
 )
 
 const defaultOptions = {

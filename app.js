@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const logger = require('./logger')
+const logger = require('./utils/logs/logs')
 const { expressjwt: jwt } = require("express-jwt");
 
 const router = require('./routes/index');

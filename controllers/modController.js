@@ -1,4 +1,4 @@
-const logger = require("../logger")
+const logger = require("../utils/logs/logs")
 const datajs = require('../data')
 const result = require('../common/result')
 

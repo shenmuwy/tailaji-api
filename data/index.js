@@ -1,5 +1,4 @@
 const fs = require('fs')
-const logger = require('../logger')
 const filePath = './data/index.json'
 const filecreate = {
   create: function () {

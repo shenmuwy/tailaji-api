@@ -5,13 +5,14 @@ const formidable = require('formidable')
 const fs = require('fs')
 const {v4: uuidv4} = require('uuid')
 const datajs = require('../data');
+const logs = require('../utils/logs/logs')
 
 const userController = {
   // showUser 获取用户数据并展示到页面
   showUser: async function(req, res, next) {
     let id = req.query.id
     User.all(id).then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data.length===0) {
         res.json(result.fail('该用户不存在'))
         return
