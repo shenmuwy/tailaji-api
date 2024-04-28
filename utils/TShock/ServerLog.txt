@@ -1,0 +1,15 @@
+[04/26/24 14:57:49] [Server API] Verbose: TerrariaApi - Server v2.1.0.0 started.
+[04/26/24 14:57:49] [Server API] Verbose: 	Command line: D:\wangyi\gametest\TShock-5.2\TShock.Server.exe
+[04/26/24 14:57:49] [Server API] Verbose: 	OS: Microsoft Windows NT 10.0.22631.0 (64bit: True)
+[04/26/24 14:57:49] [Server API] Verbose: 	Mono: False
+[04/26/24 14:57:49] [Server API] Info: Plugin TShock v5.2.0.0 (by The TShock Team) initiated.
+[04/28/24 09:28:21] [Server API] Verbose: TerrariaApi - Server v2.1.0.0 started.
+[04/28/24 09:28:21] [Server API] Verbose: 	Command line: D:\vscode\github\express-api\tailaji-api\utils\TShock\TShock.Server.exe -world C:\Users\wangyi\Documents\My Games\Terraria\Worlds
+[04/28/24 09:28:21] [Server API] Verbose: 	OS: Microsoft Windows NT 10.0.22631.0 (64bit: True)
+[04/28/24 09:28:21] [Server API] Verbose: 	Mono: False
+[04/28/24 09:28:22] [Server API] Info: Plugin TShock v5.2.0.0 (by The TShock Team) initiated.
+[04/28/24 09:29:58] [Server API] Verbose: TerrariaApi - Server v2.1.0.0 started.
+[04/28/24 09:29:58] [Server API] Verbose: 	Command line: D:\vscode\github\express-api\tailaji-api\utils\TShock\TShock.Server.exe -world C:\Users\wangyi\Documents\My Games\Terraria\Worlds\世界2.wld
+[04/28/24 09:29:58] [Server API] Verbose: 	OS: Microsoft Windows NT 10.0.22631.0 (64bit: True)
+[04/28/24 09:29:58] [Server API] Verbose: 	Mono: False
+[04/28/24 09:29:59] [Server API] Info: Plugin TShock v5.2.0.0 (by The TShock Team) initiated.
