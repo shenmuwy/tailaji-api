@@ -5,3 +5,4 @@ yarn-error.log
 node_modules
 log
 config.js 
+/utils/TShock/tshock/logs/*

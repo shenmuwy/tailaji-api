@@ -3,50 +3,9 @@ const datajs = require('../data')
 const result = require('../common/result')
 const OSUtils = require('../utils/cpuMessage');
 const os = require('os'); // 获取系统信息
+const TShock = require('../utils/TShock/TShock.js')
 
 const modController = {
-  insertMode: async function (req, res, next) {
-    try {
-      const { modID, version } = req.body
-      let modData = await datajs.readFile()
-      if (!modID) {
-        return res.json(result.fail('模组ID不能为空'))
-      }
-      if (modData.mods) {
-        modData.mods.push({ modID, version })
-      } else {
-        modData.mods = []
-        modData.mods.push({ modID, version })
-      }
-      
-      datajs.writeFile(modData)
-      return res.json(result.success())
-    } catch (error) {
-      logger.error(error)
-    }
-  },
-  modifyMode: async function (req, res, next) {
-    try {
-      const { modID, version } = req.body
-      let modData = await datajs.readFile()
-      if (!modID) {
-        return res.json(result.fail('模组ID不能为空'))
-      }
-      if (modData.mods) {
-        modData.mods.map((item) => {
-          if (item.modID === modID) {
-            item.version = version
-          }
-        })
-        datajs.writeFile(modData)
-        return res.json(result.success())
-      } else {
-        return res.json(result.fail('还没添加模组'))
-      }
-    } catch (error) {
-      logger.error(error)
-    }
-  },
   getCpuMessage: async function (req, res, next) {
     try {
       console.time('getCPUUsage')
@@ -65,6 +24,16 @@ const modController = {
       res.json(result.success(cpuData))
     } catch (error) {
       res.json(result.fail('程序内部发生错误'))
+      logger.error(error)
+    }
+  },
+  startWorld: async function (req, res, next) {
+    const { status } = req.query
+    try {
+      const back = status == '1' ? await TShock.startWorld('世界2.wld') : await TShock.stopWorld()
+      res.json(result.success( back ? {adminCode: back[0]}: ''))
+    } catch (error) {
+      res.json(result.fail(error))
       logger.error(error)
     }
   }
