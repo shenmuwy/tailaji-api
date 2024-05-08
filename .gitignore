@@ -6,3 +6,5 @@ node_modules
 log
 config.js 
 /utils/TShock/tshock/logs/*
+/utils/TShock/ServerLog.txt
+/utils/TShock/tshock/tshock.pid
