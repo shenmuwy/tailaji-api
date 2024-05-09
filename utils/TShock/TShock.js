@@ -66,6 +66,20 @@ class TShock {
       })
     })
   }
+  getWorldName() {
+    const filesname = fs.readdirSync(
+      filePath
+    ).filter((filename) => {
+      return !filename.includes('.bak')
+    }).map((filename, index) => {
+      return {
+        label: filename.split('.')[0],
+        value: index + 1
+      }
+    })
+    return filesname
+  }
+
 }
 
 module.exports = new TShock()
