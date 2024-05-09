@@ -8,18 +8,19 @@ const TShock = require('../utils/TShock/TShock.js')
 const modController = {
   getCpuMessage: async function (req, res, next) {
     try {
+      const userData = await datajs.readFile()
       console.time('getCPUUsage')
       // 获取 CPU 利用率,获取时间长达1秒
       const cpuUsage = await OSUtils.getCPUUsage({ ms: 0, percentage: true });
 
       console.timeEnd('getCPUUsage')
-
-      console.log(OSUtils.getMemoryUsage('gb'))
+      
       const cpuData = {
         cpuNum: os.cpus().length / 2,
         cpuUsage: Number(cpuUsage),
         memoryNum: OSUtils.getMemoryUsage('gb'),
-        memoryUsage: OSUtils.getMemoryUsage('', true)
+        memoryUsage: OSUtils.getMemoryUsage('', true),
+        worldStatus: userData.world.status
       }
       res.json(result.success(cpuData))
     } catch (error) {
@@ -28,9 +29,17 @@ const modController = {
     }
   },
   startWorld: async function (req, res, next) {
-    const { status } = req.query
     try {
-      const back = status == '1' ? await TShock.startWorld('世界2.wld') : await TShock.stopWorld()
+      const { status } = req.query
+      if (status != '1' && status != '0') {
+        return res.json(result.fail('参数有误'))
+      }
+      let back = null
+      if (status == '1') {
+        back = await TShock.startWorld('世界2.wld')
+      } else {
+        back = await TShock.stopWorld()
+      }
       res.json(result.success( back ? {adminCode: back[0]}: ''))
     } catch (error) {
       res.json(result.fail(error))

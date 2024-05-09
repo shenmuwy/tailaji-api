@@ -8,6 +8,10 @@ const filecreate = {
           id: '1',
           userName: 'admin',
           passWord: '123456',
+          world: {
+            status: 0,
+            name: ''
+          }
         }
         writeFile(data)
       })
@@ -33,6 +37,26 @@ const filecreate = {
         }
         resolve()
       })
+    })
+  },
+  updateJsonValue: function (data, name, value) {
+    const keys = name.split('/')
+    const key = keys.shift()
+    if (keys.length === 0) {
+      data[key] = value
+    } else {
+      if (!data.hasOwnProperty(key)) {
+        data[key] = {}
+      }
+      this.updateJsonValue(data[key], keys.join('/'), value)
+    }
+    return data
+  },
+  saveFile: function (name, value) {
+    return new Promise(async (resolve, reject) => {
+      const data = await this.readFile()
+      const res = this.updateJsonValue(data, name, value)
+      this.writeFile(Object.assign(res, data))
     })
   }
 }

@@ -19,7 +19,7 @@ class result {
   }
 
   static fail (errData) {
-    return new result(resultCode.FAILED.code, errData, '')
+    return new result(resultCode.FAILED.code, errData || '服务异常', '')
   }
   // token验证失败
   static authFailed () {

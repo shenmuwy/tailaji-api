@@ -8,5 +8,9 @@
 			"version": "1234567"
 		}
 	],
+	"world": {
+		"status": false,
+		"name": "世界2.wld"
+	},
 	"img": "public/images/7bbc851d-1365-407b-90b4-cfa4700e574a.jpeg"
 }
